@@ -10,7 +10,7 @@ void	process(const char *cmd1, const char *cmd2, int in, int out)
 	pid = fork();
 	if (pid < 0)
 	{
-		ft_putstr_fd("fork Error\n", 2);
+		ft_putstr_fd("Error: fork()\n", 2);
 		exit(1);
 	}
 	else if (pid > 0)
@@ -28,17 +28,20 @@ int	main(int ac, char const *av[])
 	int	out;
 
 	if (ac != 5)
-		error("ac");
+	{
+		ft_putstr_fd("Error: The program takes 4 arguments.\n", 2);
+		exit(1);
+	}
 	in = open(av[1], O_RDONLY);
 	if (in < 0)
 	{
-		ft_putstr_fd("file1 Error\n", 2);
+		ft_putstr_fd("Error: file1 does not exist.\n", 2);
 		exit(1);
 	}
 	out = open(av[4], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (out < 0)
 	{
-		ft_putstr_fd("file2 Error\n", 2);
+		ft_putstr_fd("Error: file2 does not exist.\n", 2);
 		exit(1);
 	}
 	process(av[2], av[3], in, out);

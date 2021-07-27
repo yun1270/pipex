@@ -17,7 +17,7 @@ void	run_cmd(const char *cmd)
 	execve(cmd, ar, NULL);
 	cmd = ft_strjoin("/sbin/", ar[0]);
 	execve(cmd, ar, NULL);
-	ft_putstr_fd("command Error\n", 2);
+	ft_putstr_fd("Error: command does not exist.\n", 2);
 	exit(1);
 }
 
