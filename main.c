@@ -7,11 +7,11 @@ int	main(int ac, char const *av[])
 	int	status;
 
 	if (ac != 5)
-		error("ac ");
+		error("ac");
 	pipe(fd);
 	pid = fork();
 	if (pid < 0)
-		error("pid ");
+		error("pid");
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);

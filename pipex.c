@@ -3,7 +3,7 @@
 void	error(char *error)
 {
 	ft_putstr_fd(error, ft_strlen(error));
-	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd(" Error\n", 2);
 	exit(1);
 }
 
@@ -32,9 +32,9 @@ void	parent(char const *file, char const *cmd, int *fd)
 	int	out;
 
 	close(fd[WRITE]);
-	out = open(file, O_WRONLY);
+	out = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (out < 0)
-		error("file ");
+		error("file");
 	dup2(out, WRITE);
 	dup2(fd[READ], READ);
 	run_cmd(cmd);
@@ -49,7 +49,7 @@ void	child(char const *file, char const *cmd, int *fd)
 	close(fd[READ]);
 	in = open(file, O_RDONLY);
 	if (in < 0)
-		error("file ");
+		error("file");
 	dup2(in, READ);
 	dup2(fd[WRITE], WRITE);
 	run_cmd(cmd);
