@@ -1,12 +1,5 @@
 #include "pipex.h"
 
-void	error(char *error)
-{
-	ft_putstr_fd(error, ft_strlen(error));
-	ft_putstr_fd(" Error\n", 2);
-	exit(1);
-}
-
 void	run_cmd(const char *cmd)
 {
 	int		i;
@@ -24,35 +17,26 @@ void	run_cmd(const char *cmd)
 	execve(cmd, ar, NULL);
 	cmd = ft_strjoin("/sbin/", ar[0]);
 	execve(cmd, ar, NULL);
-	error(ar[0]);
+	ft_putstr_fd("command Error\n", 2);
+	exit(1);
 }
 
-void	parent(char const *file, char const *cmd, int *fd)
+void	parent(char const *cmd, int *fd, int out)
 {
-	int	out;
-
-	close(fd[WRITE]);
-	out = open(file, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (out < 0)
-		error("file");
-	dup2(out, WRITE);
-	dup2(fd[READ], READ);
+	close(fd[1]);
+	dup2(out, 1);
+	dup2(fd[0], 0);
 	run_cmd(cmd);
 	close(out);
-	close(fd[READ]);
+	close(fd[0]);
 }
 
-void	child(char const *file, char const *cmd, int *fd)
+void	child(char const *cmd, int *fd, int in)
 {
-	int	in;
-
-	close(fd[READ]);
-	in = open(file, O_RDONLY);
-	if (in < 0)
-		error("file");
-	dup2(in, READ);
-	dup2(fd[WRITE], WRITE);
+	close(fd[0]);
+	dup2(in, 0);
+	dup2(fd[1], 1);
 	run_cmd(cmd);
 	close(in);
-	close(fd[WRITE]);
+	close(fd[1]);
 }
